@@ -13,7 +13,7 @@ from twisted.python import log
 
 from constants import *
 
-__all__ = ['GearmanProtocol']
+__all__ = ['GearmanProtocol', 'GearmanWorker']
 
 class GearmanProtocol(stateful.StatefulProtocol):
     """Base protocol for handling gearman connections."""
