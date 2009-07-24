@@ -109,7 +109,8 @@ class GearmanWorker(object):
         self.functions[name] = func
         self.protocol.send_raw(CAN_DO, name)
 
-    def getJob(self):
+    # Ignored argument for easier recursion.
+    def getJob(self, _ignored=True):
 
         def _grab_job_res(stuff):
             if stuff[0] == JOB_ASSIGN:
