@@ -21,7 +21,6 @@ class GearmanProtocol(stateful.StatefulProtocol):
     def makeConnection(self, transport):
         stateful.StatefulProtocol.makeConnection(self, transport)
         self.receivingCommand = 0
-        self.sleep_deferred = None
         self.deferreds = deque()
 
     def send_raw(self, cmd, data=''):
@@ -60,25 +59,15 @@ class GearmanProtocol(stateful.StatefulProtocol):
         return self._completed, size
 
     def _completed(self, data):
-        # NOOPs wake listeners
-        if self.receivingCommand == NOOP:
-            assert self.sleep_deferred
-            self.sleep_deferred.callback(None)
-            self.sleep_deferred = None
-        else:
-            assert not self.sleep_deferred
-            d = self.deferreds.popleft()
-            d.callback((self.receivingCommand, data))
+        d = self.deferreds.popleft()
+        d.callback((self.receivingCommand, data))
         self.receivingCommand = 0
 
         return self._headerReceived, HEADER_LEN
 
     def pre_sleep(self):
         """Enter a sleep state."""
-        if not self.sleep_deferred:
-            self.sleep_deferred = defer.Deferred()
-            self.send_raw(PRE_SLEEP)
-        return self.sleep_deferred
+        return self.send(PRE_SLEEP)
 
     def echo(self, data="hello"):
         """Send an echo request."""
