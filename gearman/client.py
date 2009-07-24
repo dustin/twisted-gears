@@ -91,6 +91,7 @@ class GearmanWorker(object):
     def __init__(self, protocol):
         self.protocol = protocol
         self.functions = {}
+        self.sleeping = None
 
     def registerFunction(self, name, func):
         """Register the ability to perform a function."""
@@ -101,12 +102,25 @@ class GearmanWorker(object):
     def _send_job_res(self, cmd, job, data=''):
         self.protocol.send_raw(cmd, job.handle + "\0" + data)
 
+    def _sleep(self):
+        if not self.sleeping:
+            self.sleeping = self.protocol.pre_sleep()
+            def _clear(x):
+                self.sleeping = None
+            self.sleeping.addBoth(_clear)
+        return self.sleeping
+
     @defer.inlineCallbacks
     def getJob(self):
         """Get the next job."""
+
+        # If we're currently sleeping, attach to the existing sleep.
+        if self.sleeping:
+            yield self._sleep()
+
         stuff = yield self.protocol.send(GRAB_JOB)
         while stuff[0] == NO_JOB:
-            yield self.protocol.pre_sleep()
+            yield self._sleep()
             stuff = yield self.protocol.send(GRAB_JOB)
         defer.returnValue(GearmanJob(stuff[1]))
 
