@@ -22,15 +22,16 @@ class GearmanProtocol(stateful.StatefulProtocol):
         self.receivingCommand = 0
         self.deferreds = deque()
 
-    def _send_raw(self, cmd, data):
-        """Send a command with the given data."""
+    def send_raw(self, cmd, data):
+        """Send a command with the given data with no response."""
 
         self.transport.write(REQ_MAGIC)
         self.transport.write(struct.pack(">II", cmd, len(data)))
         self.transport.write(data)
 
-    def _send(self, cmd, data):
-        self._send_raw(cmd, data)
+    def send(self, cmd, data):
+        """Send a command and get a deferred waiting for the response."""
+        self.send_raw(cmd, data)
         d = defer.Deferred()
         self.deferreds.append(d)
         return d
@@ -68,4 +69,4 @@ class GearmanProtocol(stateful.StatefulProtocol):
     def echo(self, data="hello"):
         """Send an echo request."""
 
-        return self._send(ECHO_REQ, data)
+        return self.send(ECHO_REQ, data)
