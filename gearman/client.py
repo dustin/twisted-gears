@@ -77,8 +77,10 @@ class GearmanProtocol(protocol.Protocol):
         self.toread = size
 
     def _completed(self, data):
-        d = self.deferreds.popleft()
-        d.callback(data)
+        # NOOPs don't *do* anything.
+        if self.receivingCommand != NOOP:
+            d = self.deferreds.popleft()
+            d.callback(data)
         self.receivingCommand = 0
         self.toread = 0
 
