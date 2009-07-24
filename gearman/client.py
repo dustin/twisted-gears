@@ -61,7 +61,7 @@ class GearmanProtocol(stateful.StatefulProtocol):
         # NOOPs don't *do* anything.
         if self.receivingCommand != NOOP:
             d = self.deferreds.popleft()
-            d.callback(data)
+            d.callback((self.receivingCommand, data))
         self.receivingCommand = 0
 
         return self._headerReceived, HEADER_LEN

@@ -12,14 +12,16 @@ from gearman import client
 @defer.inlineCallbacks
 def worker(gearman):
     rv = yield gearman.echo()
-    print "Echo 1 yielded ``%s''" % rv
+    print "Echo 1 yielded %d: ``%s''" % rv
     rv = yield gearman.echo("something else")
-    print "Echo 2 yielded ``%s''" % rv
+    print "Echo 2 yielded %d: ``%s''" % rv
 
     d1 = gearman.echo("pipeline 1")
-    d1.addCallback(lambda v: sys.stdout.write("Echo 3 yielded ``%s''\n" % v))
+    d1.addCallback(lambda v: sys.stdout.write(
+            "Echo 3 yielded %d: ``%s''\n" % v))
     d2 = gearman.echo("pipeline 2")
-    d2.addCallback(lambda v: sys.stdout.write("Echo 4 yielded ``%s''\n" % v))
+    d2.addCallback(lambda v: sys.stdout.write(
+            "Echo 4 yielded %d: ``%s''\n" % v))
 
     dl = defer.DeferredList([d1, d2])
     yield dl
