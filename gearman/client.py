@@ -42,7 +42,7 @@ class GearmanProtocol(stateful.StatefulProtocol):
 
     def connectionLost(self, reason):
         try:
-            for d in self.deferreds:
+            for d in list(self.deferreds):
                 d.errback(reason)
         except:
             log.err()
