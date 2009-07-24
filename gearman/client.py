@@ -11,6 +11,8 @@ from twisted.python import log
 
 from constants import *
 
+__all__ = ['Buffer', 'GearmanProtocol']
+
 class Buffer(deque):
     """A read buffer that will treat chunks of data as a single string."""
 
