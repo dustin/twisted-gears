@@ -109,6 +109,9 @@ class GearmanWorker(object):
         self.functions[name] = func
         self.protocol.send_raw(CAN_DO, name)
 
+    def _send_job_res(self, cmd, job, data=''):
+        self.protocol.send_raw(cmd, job.handle + "\0" + data)
+
     # Ignored argument for easier recursion.
     def getJob(self, _ignored=True):
 
@@ -127,10 +130,12 @@ class GearmanWorker(object):
         def _respond(x):
             if x is None:
                 x = ""
-            self.protocol.send_raw(WORK_COMPLETE, job.handle + "\0" + x)
+            self._send_job_res(WORK_COMPLETE, job, x)
 
         def _fail(x):
-            self.protocol.send_raw(WORK_EXCEPTION, job.handle + "\0" + str(x))
+            self._send_job
+            self._send_job_res(WORK_EXCEPTION, job, x)
+            self._send_job_res(WORK_FAIL, job)
 
         f = self.functions[job.function]
         d = defer.maybeDeferred(f, job.data)
