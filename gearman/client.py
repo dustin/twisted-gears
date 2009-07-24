@@ -101,35 +101,29 @@ class GearmanWorker(object):
     def _send_job_res(self, cmd, job, data=''):
         self.protocol.send_raw(cmd, job.handle + "\0" + data)
 
-    # Ignored argument for easier recursion.
-    def getJob(self, _ignored=True):
+    @defer.inlineCallbacks
+    def getJob(self):
+        """Get the next job."""
+        stuff = yield self.protocol.send(GRAB_JOB)
+        while stuff[0] == NO_JOB:
+            yield self.protocol.pre_sleep()
+            stuff = yield self.protocol.send(GRAB_JOB)
+        defer.returnValue(GearmanJob(stuff[1]))
 
-        def _grab_job_res(stuff):
-            if stuff[0] == JOB_ASSIGN:
-                return GearmanJob(stuff[1])
-            else:
-                return self.protocol.pre_sleep().addCallback(self.getJob)
-
-        d = self.protocol.send(GRAB_JOB)
-        d.addCallback(_grab_job_res)
-        d.addErrback(lambda x: sys.stderr.write("Got err %s\n" % x))
-        return d
-
+    @defer.inlineCallbacks
     def _finishJob(self, job):
-        def _respond(x):
-            if x is None:
-                x = ""
-            self._send_job_res(WORK_COMPLETE, job, x)
-
-        def _fail(x):
-            self._send_job
-            self._send_job_res(WORK_EXCEPTION, job, x)
-            self._send_job_res(WORK_FAIL, job)
-
+        assert job
         f = self.functions[job.function]
-        d = defer.maybeDeferred(f, job.data)
-        d.addCallback(_respond)
-        d.addErrback(_fail)
+        assert f
+        try:
+            rv = yield f(job.data)
+            if rv is None:
+                rv = ""
+            self._send_job_res(WORK_COMPLETE, job, rv)
+        except:
+            x = sys.exc_info()
+            self._send_job_res(WORK_EXCEPTION, job, str(x))
+            self._send_job_res(WORK_FAIL, job)
 
     def __iter__(self):
         while True:
