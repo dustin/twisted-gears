@@ -20,7 +20,11 @@ def worker(gearman):
     w.registerFunction("test", run_test)
 
     coop = task.Cooperator()
-    coop.coiterate(iter(w))
+    for i in range(5):
+        ## Ramp up start
+        reactor.callLater(0.1 * i, lambda: coop.coiterate(iter(w)))
+        ## Immediate start
+        # coop.coiterate(iter(w))
 
 d=protocol.ClientCreator(reactor, client.GearmanProtocol).connectTCP(
     sys.argv[1], 4730)
