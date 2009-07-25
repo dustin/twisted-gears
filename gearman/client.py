@@ -13,7 +13,7 @@ from twisted.python import log
 
 from constants import *
 
-__all__ = ['GearmanProtocol', 'GearmanWorker']
+__all__ = ['GearmanProtocol', 'GearmanWorker', 'GearmanClient']
 
 class GearmanProtocol(stateful.StatefulProtocol):
     """Base protocol for handling gearman connections."""
@@ -159,3 +159,73 @@ class GearmanWorker(object):
     def __iter__(self):
         while True:
             yield self.getJob().addCallback(self._finishJob)
+
+class GearmanJobHandle(object):
+
+    def __init__(self, deferred):
+        self._deferred = deferred
+        self._work_data = []
+        self._work_warning = []
+
+    @property
+    def work_data(self):
+        return ''.join(self._work_data)
+
+    @property
+    def wark_warning(self):
+        return ''.join(self._work_warning)
+
+class GearmanJobFailed(Exception):
+    pass
+
+class GearmanClient(object):
+    """A gearman client.
+
+    Submits jobs and stuff."""
+
+    def __init__(self, protocol):
+        self.protocol = protocol
+        self.protocol.register_unsolicited(self)
+        self.jobs = {}
+
+    def _register(self, job_handle, deferred):
+        self.jobs[job_handle] = deferred
+
+    def unsolicited(self, cmd, data):
+        if cmd in [ WORK_COMPLETE, WORK_FAIL,
+                    WORK_DATA, WORK_WARNING ]:
+            pos = data.index("\0")
+            if pos == -1:
+                handle = data
+            else:
+                handle = data[:pos]
+                data = data[pos+1:]
+
+            j = self.jobs[handle]
+
+            if cmd in [ WORK_COMPLETE, WORK_FAIL]:
+                self._jobFinished(cmd, j, handle, data)
+
+    def _jobFinished(self, cmd, job, handle, data):
+        # Delete the job if it's finished
+        del self.jobs[handle]
+
+        if cmd == WORK_COMPLETE:
+            job._deferred.callback(data)
+        elif cmd == WORK_FAIL:
+            job._deferred.errback(GearmanJobFailed())
+
+    def submit(self, function, data, unique_id=''):
+        """Submit a job with the given function name and data."""
+
+        def _submitted(x, d):
+            self._register(x[1], GearmanJobHandle(d))
+            return rv
+
+        d = self.protocol.send(SUBMIT_JOB,
+                               function + "\0" + unique_id + "\0" + data)
+
+        rv = defer.Deferred()
+        d.addCallback(_submitted, rv)
+
+        return rv
