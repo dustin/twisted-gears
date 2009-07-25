@@ -18,10 +18,14 @@ __all__ = ['GearmanProtocol', 'GearmanWorker']
 class GearmanProtocol(stateful.StatefulProtocol):
     """Base protocol for handling gearman connections."""
 
+    unsolicited = [ WORK_COMPLETE, WORK_FAIL,
+                    WORK_DATA, WORK_WARNING ]
+
     def makeConnection(self, transport):
         stateful.StatefulProtocol.makeConnection(self, transport)
         self.receivingCommand = 0
         self.deferreds = deque()
+        self.unsolicited_handlers = set()
 
     def send_raw(self, cmd, data=''):
         """Send a command with the given data with no response."""
@@ -59,11 +63,24 @@ class GearmanProtocol(stateful.StatefulProtocol):
         return self._completed, size
 
     def _completed(self, data):
-        d = self.deferreds.popleft()
-        d.callback((self.receivingCommand, data))
+        if self.receivingCommand in self.unsolicited:
+            self._unsolicited(self.receivingCommand, data)
+        else:
+            d = self.deferreds.popleft()
+            d.callback((self.receivingCommand, data))
         self.receivingCommand = 0
 
         return self._headerReceived, HEADER_LEN
+
+    def _unsolicited(self, cmd, data):
+        for cb in self.unsolicited_handlers:
+            cb.unsolicited(cmd, data)
+
+    def register_unsolicited(self, cb):
+        self.unsolicited_handlers.add(cb)
+
+    def unregister_unsolicited(self, cb):
+        self.unsolicited_handlers.discard(cb)
 
     def pre_sleep(self):
         """Enter a sleep state."""
