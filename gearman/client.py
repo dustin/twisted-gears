@@ -19,7 +19,7 @@ class GearmanProtocol(stateful.StatefulProtocol):
     """Base protocol for handling gearman connections."""
 
     unsolicited = [ WORK_COMPLETE, WORK_FAIL,
-                    WORK_DATA, WORK_WARNING ]
+                    WORK_DATA, WORK_WARNING, WORK_EXCEPTION ]
 
     def makeConnection(self, transport):
         stateful.StatefulProtocol.makeConnection(self, transport)
