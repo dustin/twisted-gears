@@ -246,6 +246,26 @@ class GearmanWorkerTest(ProtocolTestCase):
         d.addCallback(_verify)
         return d
 
+    def test_doJobs(self):
+        self.gw.functions['blah'] = lambda x: x.upper()
+        d = self.gw.doJobs().next()
+        self.write_response(constants.JOB_ASSIGN,
+                            "footdle\0blah\0args and stuff")
+
+        def _verify(x):
+            self.assertReceived(constants.GRAB_JOB, "")
+            self.assertReceived(constants.WORK_COMPLETE,
+                                "footdle\0ARGS AND STUFF")
+
+        d.addCallback(_verify)
+        return d
+
+    def test_doJobsNoLoop(self):
+        try:
+            d = self.gw.doJobs(lambda: False).next()
+        except StopIteration:
+            pass
+
 class GearmanJobHandleTest(unittest.TestCase):
 
     def test_workData(self):

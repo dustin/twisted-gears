@@ -22,7 +22,7 @@ def worker(gearman):
     coop = task.Cooperator()
     for i in range(5):
         ## Ramp up start
-        reactor.callLater(0.1 * i, lambda: coop.coiterate(iter(w)))
+        reactor.callLater(0.1 * i, lambda: coop.coiterate(w.doJobs()))
         ## Immediate start
         # coop.coiterate(iter(w))
 

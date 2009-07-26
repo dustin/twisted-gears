@@ -158,8 +158,9 @@ class GearmanWorker(object):
         """Do a single job"""
         return self.getJob().addCallback(self._finishJob)
 
-    def __iter__(self):
-        while True:
+    def doJobs(self, keepGoing=lambda: True):
+        """Do jobs forever (or until the given function returns False)"""
+        while keepGoing():
             yield self.doJob()
 
 class GearmanJobHandle(object):
