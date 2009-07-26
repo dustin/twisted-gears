@@ -30,9 +30,9 @@ class GearmanProtocol(stateful.StatefulProtocol):
     def send_raw(self, cmd, data=''):
         """Send a command with the given data with no response."""
 
-        self.transport.write(REQ_MAGIC)
-        self.transport.write(struct.pack(">II", cmd, len(data)))
-        self.transport.write(data)
+        self.transport.writeSequence([REQ_MAGIC,
+                                      struct.pack(">II", cmd, len(data)),
+                                      data])
 
     def send(self, cmd, data=''):
         """Send a command and get a deferred waiting for the response."""
