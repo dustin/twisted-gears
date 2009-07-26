@@ -122,3 +122,13 @@ class GearmanProtocolTest(unittest.TestCase):
         self.write_response(constants.WORK_COMPLETE, "test\0")
         return d
 
+class GearmanJobTest(unittest.TestCase):
+
+    def test_constructor(self):
+        gj = client.GearmanJob("footdle\0dys\0some data")
+        self.assertEquals("footdle", gj.handle)
+        self.assertEquals("dys", gj.function)
+        self.assertEquals("some data", gj.data)
+
+        self.assertEquals("<GearmanJob footdle func=dys with 9 bytes of data>",
+                          repr(gj))
