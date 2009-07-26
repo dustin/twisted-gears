@@ -245,3 +245,15 @@ class GearmanWorkerTest(ProtocolTestCase):
 
         d.addCallback(_verify)
         return d
+
+class GearmanJobHandleTest(unittest.TestCase):
+
+    def test_workData(self):
+        gjh = client.GearmanJobHandle(None)
+        gjh._work_data.extend(['test', 'ing'])
+        self.assertEquals('testing', gjh.work_data)
+
+    def test_workWarning(self):
+        gjh = client.GearmanJobHandle(None)
+        gjh._work_warning.extend(['test', 'ing'])
+        self.assertEquals('testing', gjh.work_warning)
