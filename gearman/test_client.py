@@ -266,6 +266,10 @@ class GearmanWorkerTest(ProtocolTestCase):
         except StopIteration:
             pass
 
+    def test_setId(self):
+        self.gw.setId("my id")
+        self.assertReceived(constants.SET_CLIENT_ID, "my id")
+
 class GearmanJobHandleTest(unittest.TestCase):
 
     def test_workData(self):

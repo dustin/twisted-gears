@@ -17,6 +17,7 @@ def run_test(j):
 # @defer.inlineCallbacks
 def worker(gearman):
     w = client.GearmanWorker(gearman)
+    w.setId("exampleworker")
     w.registerFunction("test", run_test)
 
     coop = task.Cooperator()

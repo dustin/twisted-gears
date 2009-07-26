@@ -107,6 +107,10 @@ class GearmanWorker(object):
         self.functions = {}
         self.sleeping = None
 
+    def setId(self, client_id):
+        """Set the client ID for monitoring and what-not."""
+        self.protocol.send_raw(SET_CLIENT_ID, client_id)
+
     def registerFunction(self, name, func):
         """Register the ability to perform a function."""
 
