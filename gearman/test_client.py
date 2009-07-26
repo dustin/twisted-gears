@@ -1,4 +1,5 @@
 import struct
+from collections import deque
 
 from zope.interface import implements
 
@@ -35,7 +36,7 @@ class TestTransport(object):
 class ExpectedFailure(Exception):
     pass
 
-class GearmanProtocolTest(unittest.TestCase):
+class ProtocolTestCase(unittest.TestCase):
 
     def setUp(self):
         self.trans = TestTransport()
@@ -46,12 +47,15 @@ class GearmanProtocolTest(unittest.TestCase):
         self.assertEquals(["\0REQ",
                            struct.pack(">II", cmd, len(data)),
                            data],
-                          self.trans.received)
+                          self.trans.received[:3])
+        self.trans.received = self.trans.received[3:]
 
     def write_response(self, cmd, data):
         self.gp.dataReceived("\0RES")
         self.gp.dataReceived(struct.pack(">II", cmd, len(data)))
         self.gp.dataReceived(data)
+
+class GearmanProtocolTest(ProtocolTestCase):
 
     def test_makeConnection(self):
         self.assertEquals(0, self.gp.receivingCommand)
@@ -132,3 +136,112 @@ class GearmanJobTest(unittest.TestCase):
 
         self.assertEquals("<GearmanJob footdle func=dys with 9 bytes of data>",
                           repr(gj))
+
+class GearmanWorkerTest(ProtocolTestCase):
+
+    def setUp(self):
+        super(GearmanWorkerTest, self).setUp()
+        self.gw = client.GearmanWorker(self.gp)
+
+    def test_registerFunction(self):
+        self.gw.registerFunction("awesomeness", lambda x: True)
+        self.assertReceived(constants.CAN_DO, "awesomeness")
+
+    def test_sendingJobResponse(self):
+        job = client.GearmanJob("test\0blah\0junk")
+        self.gw._send_job_res(constants.WORK_COMPLETE, job, "the value")
+        self.assertReceived(constants.WORK_COMPLETE, "test\0the value")
+
+    def test_sleep(self):
+        a = []
+        for i in range(5):
+            a.append(self.gw._sleep())
+
+        self.write_response(constants.NOOP, "")
+        return defer.DeferredList(a)
+
+    def test_getJob(self):
+        d = self.gw.getJob()
+        self.write_response(constants.JOB_ASSIGN,
+                            "footdle\0funk\0args and stuff")
+        def _handleJob(j):
+            self.assertEquals("footdle", j.handle)
+            self.assertEquals("funk", j.function)
+            self.assertEquals("args and stuff", j.data)
+
+        d.addCallback(_handleJob)
+        return d
+
+    def test_getJobWithWaiting(self):
+        d = self.gw.getJob()
+        self.write_response(constants.NO_JOB, "")
+        self.write_response(constants.NOOP, "")
+        self.write_response(constants.JOB_ASSIGN,
+                            "footdle\0funk\0args and stuff")
+        def _handleJob(j):
+            self.assertEquals("footdle", j.handle)
+            self.assertEquals("funk", j.function)
+            self.assertEquals("args and stuff", j.data)
+
+        d.addCallback(_handleJob)
+        return d
+
+    def test_getJobWhileAlreadyWaiting(self):
+        sd = self.gw._sleep()
+        d = self.gw.getJob()
+        self.write_response(constants.NOOP, "")
+        self.write_response(constants.JOB_ASSIGN,
+                            "footdle\0funk\0args and stuff")
+        def _handleJob(j):
+            self.assertEquals("footdle", j.handle)
+            self.assertEquals("funk", j.function)
+            self.assertEquals("args and stuff", j.data)
+
+        d.addCallback(_handleJob)
+        return defer.DeferredList([sd, d])
+
+    def test_finishJob(self):
+        self.gw.functions['blah'] = lambda x: x.upper()
+        job = client.GearmanJob("test\0blah\0junk")
+        d = self.gw._finishJob(job)
+
+        d.addCallback(lambda x:
+                          self.assertReceived(constants.WORK_COMPLETE,
+                                              "test\0JUNK"))
+
+    def test_finishJobNull(self):
+        self.gw.functions['blah'] = lambda x: None
+        job = client.GearmanJob("test\0blah\0junk")
+        d = self.gw._finishJob(job)
+
+        d.addCallback(lambda x:
+                          self.assertReceived(constants.WORK_COMPLETE,
+                                              "test\0"))
+
+    def test_finishJobException(self):
+        def _failing(x):
+            raise Exception("failed")
+        self.gw.functions['blah'] = _failing
+        job = client.GearmanJob("test\0blah\0junk")
+        d = self.gw._finishJob(job)
+
+        def _checkReceived(x):
+            self.assertReceived(constants.WORK_EXCEPTION,
+                                "test\0" + 'Exception(failed)')
+            self.assertReceived(constants.WORK_FAIL, "test\0")
+
+        d.addCallback(_checkReceived)
+
+    def test_doJob(self):
+        self.gw.functions['blah'] = lambda x: x.upper()
+        d = self.gw.doJob()
+        self.write_response(constants.JOB_ASSIGN,
+                            "footdle\0blah\0args and stuff")
+
+        def _verify(x):
+            self.assertReceived(constants.GRAB_JOB, "")
+            self.assertReceived(constants.WORK_COMPLETE,
+                                "footdle\0ARGS AND STUFF")
+
+        d.addCallback(_verify)
+        return d

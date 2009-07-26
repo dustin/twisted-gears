@@ -149,13 +149,18 @@ class GearmanWorker(object):
                 rv = ""
             self._send_job_res(WORK_COMPLETE, job, rv)
         except:
-            x = sys.exc_info()
-            self._send_job_res(WORK_EXCEPTION, job, str(x))
+            etype, emsg, bt = sys.exc_info()
+            self._send_job_res(WORK_EXCEPTION, job, "%s(%s)"
+                               % (etype.__name__, emsg))
             self._send_job_res(WORK_FAIL, job)
+
+    def doJob(self):
+        """Do a single job"""
+        return self.getJob().addCallback(self._finishJob)
 
     def __iter__(self):
         while True:
-            yield self.getJob().addCallback(self._finishJob)
+            yield self.doJob()
 
 class GearmanJobHandle(object):
 
