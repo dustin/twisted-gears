@@ -172,7 +172,7 @@ class GearmanJobHandle(object):
         return ''.join(self._work_data)
 
     @property
-    def wark_warning(self):
+    def work_warning(self):
         return ''.join(self._work_warning)
 
 class GearmanJobFailed(Exception):
