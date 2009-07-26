@@ -16,6 +16,7 @@ def gclient(gearman):
 
     x = yield w.submit('test', 'some data')
     print "result:", repr(x)
+    reactor.stop()
 
 d=protocol.ClientCreator(reactor, client.GearmanProtocol).connectTCP(
     sys.argv[1], 4730)
