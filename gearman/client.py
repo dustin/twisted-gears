@@ -190,13 +190,13 @@ class GearmanClient(object):
         self.protocol.register_unsolicited(self.unsolicited)
         self.jobs = {}
 
-    def _register(self, job_handle, deferred):
-        self.jobs[job_handle] = deferred
+    def _register(self, job_handle, job):
+        self.jobs[job_handle] = job
 
     def unsolicited(self, cmd, data):
         if cmd in [ WORK_COMPLETE, WORK_FAIL,
                     WORK_DATA, WORK_WARNING ]:
-            pos = data.index("\0")
+            pos = data.find("\0")
             if pos == -1:
                 handle = data
             else:
@@ -222,7 +222,6 @@ class GearmanClient(object):
 
         def _submitted(x, d):
             self._register(x[1], GearmanJobHandle(d))
-            return rv
 
         d = self.protocol.send(SUBMIT_JOB,
                                function + "\0" + unique_id + "\0" + data)
