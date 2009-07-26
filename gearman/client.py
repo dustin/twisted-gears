@@ -45,11 +45,8 @@ class GearmanProtocol(stateful.StatefulProtocol):
         return self._headerReceived, HEADER_LEN
 
     def connectionLost(self, reason):
-        try:
-            for d in list(self.deferreds):
-                d.errback(reason)
-        except:
-            log.err()
+        for d in list(self.deferreds):
+            d.errback(reason)
         self.deferreds.clear()
 
     def _headerReceived(self, header):
@@ -74,7 +71,7 @@ class GearmanProtocol(stateful.StatefulProtocol):
 
     def _unsolicited(self, cmd, data):
         for cb in self.unsolicited_handlers:
-            cb.unsolicited(cmd, data)
+            cb(cmd, data)
 
     def register_unsolicited(self, cb):
         self.unsolicited_handlers.add(cb)
@@ -185,7 +182,7 @@ class GearmanClient(object):
 
     def __init__(self, protocol):
         self.protocol = protocol
-        self.protocol.register_unsolicited(self)
+        self.protocol.register_unsolicited(self.unsolicited)
         self.jobs = {}
 
     def _register(self, job_handle, deferred):
