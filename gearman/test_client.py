@@ -273,12 +273,12 @@ class GearmanWorkerTest(ProtocolTestCase):
 class GearmanJobHandleTest(unittest.TestCase):
 
     def test_workData(self):
-        gjh = client.GearmanJobHandle(None)
+        gjh = client._GearmanJobHandle(None)
         gjh._work_data.extend(['test', 'ing'])
         self.assertEquals('testing', gjh.work_data)
 
     def test_workWarning(self):
-        gjh = client.GearmanJobHandle(None)
+        gjh = client._GearmanJobHandle(None)
         gjh._work_warning.extend(['test', 'ing'])
         self.assertEquals('testing', gjh.work_warning)
 
@@ -289,16 +289,16 @@ class GearmanClientTest(ProtocolTestCase):
         self.gc = client.GearmanClient(self.gp)
 
     def test_unsolicitedUnused(self):
-        self.gc._register('x', client.GearmanJobHandle(None))
+        self.gc._register('x', client._GearmanJobHandle(None))
         self.gc._unsolicited(constants.WORK_DATA, "x\0some data")
 
     def test_unsolicitedUnusedNoData(self):
-        self.gc._register('x', client.GearmanJobHandle(None))
+        self.gc._register('x', client._GearmanJobHandle(None))
         self.gc._unsolicited(constants.WORK_DATA, "x")
 
     def test_finishJob(self):
         d = defer.Deferred()
-        self.gc._register('x', client.GearmanJobHandle(d))
+        self.gc._register('x', client._GearmanJobHandle(d))
         self.gc._unsolicited(constants.WORK_COMPLETE, "x\0some data")
 
         d.addCallback(lambda x: self.assertEquals("some data", x))
@@ -306,7 +306,7 @@ class GearmanClientTest(ProtocolTestCase):
 
     def test_failJob(self):
         d = defer.Deferred()
-        self.gc._register('x', client.GearmanJobHandle(d))
+        self.gc._register('x', client._GearmanJobHandle(d))
         self.gc._unsolicited(constants.WORK_FAIL, "x\0some data")
 
         d.addErrback(lambda x: x.trap(client.GearmanJobFailed))

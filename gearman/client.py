@@ -167,7 +167,7 @@ class GearmanWorker(object):
         while keepGoing():
             yield self.doJob()
 
-class GearmanJobHandle(object):
+class _GearmanJobHandle(object):
 
     def __init__(self, deferred):
         self._deferred = deferred
@@ -225,7 +225,7 @@ class GearmanClient(object):
     def _submit(self, cmd, function, data, unique_id):
 
         def _submitted(x, d):
-            self._register(x[1], GearmanJobHandle(d))
+            self._register(x[1], _GearmanJobHandle(d))
 
         d = self.protocol.send(cmd,
                                function + "\0" + unique_id + "\0" + data)
