@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>gearman.constants</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="gearman-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="gearman-module.html">Package&nbsp;gearman</a> ::
+        Module&nbsp;constants
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="gearman.constants-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="gearman.constants-module.html">Module gearman.constants</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""Protocol definitions."""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">struct</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable gearman.client.REQ_MAGIC=gearman.client-module.html#REQ_MAGIC,Variable gearman.constants.REQ_MAGIC=gearman.constants-module.html#REQ_MAGIC"><a title="gearman.client.REQ_MAGIC
+gearman.constants.REQ_MAGIC" class="py-name" href="#" onclick="return doclink('link-0', 'REQ_MAGIC', 'link-0');">REQ_MAGIC</a></tt>          <tt class="py-op">=</tt> <tt class="py-string">"\0REQ"</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable gearman.client.RES_MAGIC=gearman.client-module.html#RES_MAGIC,Variable gearman.constants.RES_MAGIC=gearman.constants-module.html#RES_MAGIC"><a title="gearman.client.RES_MAGIC
+gearman.constants.RES_MAGIC" class="py-name" href="#" onclick="return doclink('link-1', 'RES_MAGIC', 'link-1');">RES_MAGIC</a></tt>          <tt class="py-op">=</tt> <tt class="py-string">"\0RES"</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt id="link-2" class="py-name" targets="Variable gearman.client.CAN_DO=gearman.client-module.html#CAN_DO,Variable gearman.constants.CAN_DO=gearman.constants-module.html#CAN_DO"><a title="gearman.client.CAN_DO
+gearman.constants.CAN_DO" class="py-name" href="#" onclick="return doclink('link-2', 'CAN_DO', 'link-2');">CAN_DO</a></tt>             <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt id="link-3" class="py-name" targets="Variable gearman.client.CANT_DO=gearman.client-module.html#CANT_DO,Variable gearman.constants.CANT_DO=gearman.constants-module.html#CANT_DO"><a title="gearman.client.CANT_DO
+gearman.constants.CANT_DO" class="py-name" href="#" onclick="return doclink('link-3', 'CANT_DO', 'link-3');">CANT_DO</a></tt>            <tt class="py-op">=</tt> <tt class="py-number">2</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable gearman.client.RESET_ABILITIES=gearman.client-module.html#RESET_ABILITIES,Variable gearman.constants.RESET_ABILITIES=gearman.constants-module.html#RESET_ABILITIES"><a title="gearman.client.RESET_ABILITIES
+gearman.constants.RESET_ABILITIES" class="py-name" href="#" onclick="return doclink('link-4', 'RESET_ABILITIES', 'link-4');">RESET_ABILITIES</a></tt>    <tt class="py-op">=</tt> <tt class="py-number">3</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt id="link-5" class="py-name" targets="Variable gearman.client.PRE_SLEEP=gearman.client-module.html#PRE_SLEEP,Variable gearman.constants.PRE_SLEEP=gearman.constants-module.html#PRE_SLEEP"><a title="gearman.client.PRE_SLEEP
+gearman.constants.PRE_SLEEP" class="py-name" href="#" onclick="return doclink('link-5', 'PRE_SLEEP', 'link-5');">PRE_SLEEP</a></tt>          <tt class="py-op">=</tt> <tt class="py-number">4</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt id="link-6" class="py-name" targets="Variable gearman.client.NOOP=gearman.client-module.html#NOOP,Variable gearman.constants.NOOP=gearman.constants-module.html#NOOP"><a title="gearman.client.NOOP
+gearman.constants.NOOP" class="py-name" href="#" onclick="return doclink('link-6', 'NOOP', 'link-6');">NOOP</a></tt>               <tt class="py-op">=</tt> <tt class="py-number">6</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt id="link-7" class="py-name" targets="Variable gearman.client.SUBMIT_JOB=gearman.client-module.html#SUBMIT_JOB,Variable gearman.constants.SUBMIT_JOB=gearman.constants-module.html#SUBMIT_JOB"><a title="gearman.client.SUBMIT_JOB
+gearman.constants.SUBMIT_JOB" class="py-name" href="#" onclick="return doclink('link-7', 'SUBMIT_JOB', 'link-7');">SUBMIT_JOB</a></tt>         <tt class="py-op">=</tt> <tt class="py-number">7</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt id="link-8" class="py-name" targets="Variable gearman.client.JOB_CREATED=gearman.client-module.html#JOB_CREATED,Variable gearman.constants.JOB_CREATED=gearman.constants-module.html#JOB_CREATED"><a title="gearman.client.JOB_CREATED
+gearman.constants.JOB_CREATED" class="py-name" href="#" onclick="return doclink('link-8', 'JOB_CREATED', 'link-8');">JOB_CREATED</a></tt>        <tt class="py-op">=</tt> <tt class="py-number">8</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt id="link-9" class="py-name" targets="Variable gearman.client.GRAB_JOB=gearman.client-module.html#GRAB_JOB,Variable gearman.constants.GRAB_JOB=gearman.constants-module.html#GRAB_JOB"><a title="gearman.client.GRAB_JOB
+gearman.constants.GRAB_JOB" class="py-name" href="#" onclick="return doclink('link-9', 'GRAB_JOB', 'link-9');">GRAB_JOB</a></tt>           <tt class="py-op">=</tt> <tt class="py-number">9</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt id="link-10" class="py-name" targets="Variable gearman.client.NO_JOB=gearman.client-module.html#NO_JOB,Variable gearman.constants.NO_JOB=gearman.constants-module.html#NO_JOB"><a title="gearman.client.NO_JOB
+gearman.constants.NO_JOB" class="py-name" href="#" onclick="return doclink('link-10', 'NO_JOB', 'link-10');">NO_JOB</a></tt>             <tt class="py-op">=</tt> <tt class="py-number">10</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt id="link-11" class="py-name" targets="Variable gearman.client.JOB_ASSIGN=gearman.client-module.html#JOB_ASSIGN,Variable gearman.constants.JOB_ASSIGN=gearman.constants-module.html#JOB_ASSIGN"><a title="gearman.client.JOB_ASSIGN
+gearman.constants.JOB_ASSIGN" class="py-name" href="#" onclick="return doclink('link-11', 'JOB_ASSIGN', 'link-11');">JOB_ASSIGN</a></tt>         <tt class="py-op">=</tt> <tt class="py-number">11</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt id="link-12" class="py-name" targets="Variable gearman.client.WORK_STATUS=gearman.client-module.html#WORK_STATUS,Variable gearman.constants.WORK_STATUS=gearman.constants-module.html#WORK_STATUS"><a title="gearman.client.WORK_STATUS
+gearman.constants.WORK_STATUS" class="py-name" href="#" onclick="return doclink('link-12', 'WORK_STATUS', 'link-12');">WORK_STATUS</a></tt>        <tt class="py-op">=</tt> <tt class="py-number">12</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt id="link-13" class="py-name" targets="Variable gearman.client.WORK_COMPLETE=gearman.client-module.html#WORK_COMPLETE,Variable gearman.constants.WORK_COMPLETE=gearman.constants-module.html#WORK_COMPLETE"><a title="gearman.client.WORK_COMPLETE
+gearman.constants.WORK_COMPLETE" class="py-name" href="#" onclick="return doclink('link-13', 'WORK_COMPLETE', 'link-13');">WORK_COMPLETE</a></tt>      <tt class="py-op">=</tt> <tt class="py-number">13</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt id="link-14" class="py-name" targets="Variable gearman.client.WORK_FAIL=gearman.client-module.html#WORK_FAIL,Variable gearman.constants.WORK_FAIL=gearman.constants-module.html#WORK_FAIL"><a title="gearman.client.WORK_FAIL
+gearman.constants.WORK_FAIL" class="py-name" href="#" onclick="return doclink('link-14', 'WORK_FAIL', 'link-14');">WORK_FAIL</a></tt>          <tt class="py-op">=</tt> <tt class="py-number">14</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt id="link-15" class="py-name" targets="Variable gearman.client.GET_STATUS=gearman.client-module.html#GET_STATUS,Variable gearman.constants.GET_STATUS=gearman.constants-module.html#GET_STATUS"><a title="gearman.client.GET_STATUS
+gearman.constants.GET_STATUS" class="py-name" href="#" onclick="return doclink('link-15', 'GET_STATUS', 'link-15');">GET_STATUS</a></tt>         <tt class="py-op">=</tt> <tt class="py-number">15</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt id="link-16" class="py-name" targets="Variable gearman.client.ECHO_REQ=gearman.client-module.html#ECHO_REQ,Variable gearman.constants.ECHO_REQ=gearman.constants-module.html#ECHO_REQ"><a title="gearman.client.ECHO_REQ
+gearman.constants.ECHO_REQ" class="py-name" href="#" onclick="return doclink('link-16', 'ECHO_REQ', 'link-16');">ECHO_REQ</a></tt>           <tt class="py-op">=</tt> <tt class="py-number">16</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt id="link-17" class="py-name" targets="Variable gearman.client.ECHO_RES=gearman.client-module.html#ECHO_RES,Variable gearman.constants.ECHO_RES=gearman.constants-module.html#ECHO_RES"><a title="gearman.client.ECHO_RES
+gearman.constants.ECHO_RES" class="py-name" href="#" onclick="return doclink('link-17', 'ECHO_RES', 'link-17');">ECHO_RES</a></tt>           <tt class="py-op">=</tt> <tt class="py-number">17</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt id="link-18" class="py-name" targets="Variable gearman.client.SUBMIT_JOB_BG=gearman.client-module.html#SUBMIT_JOB_BG,Variable gearman.constants.SUBMIT_JOB_BG=gearman.constants-module.html#SUBMIT_JOB_BG"><a title="gearman.client.SUBMIT_JOB_BG
+gearman.constants.SUBMIT_JOB_BG" class="py-name" href="#" onclick="return doclink('link-18', 'SUBMIT_JOB_BG', 'link-18');">SUBMIT_JOB_BG</a></tt>      <tt class="py-op">=</tt> <tt class="py-number">18</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt id="link-19" class="py-name" targets="Variable gearman.client.ERROR=gearman.client-module.html#ERROR,Variable gearman.constants.ERROR=gearman.constants-module.html#ERROR"><a title="gearman.client.ERROR
+gearman.constants.ERROR" class="py-name" href="#" onclick="return doclink('link-19', 'ERROR', 'link-19');">ERROR</a></tt>              <tt class="py-op">=</tt> <tt class="py-number">19</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt id="link-20" class="py-name" targets="Variable gearman.client.STATUS_RES=gearman.client-module.html#STATUS_RES,Variable gearman.constants.STATUS_RES=gearman.constants-module.html#STATUS_RES"><a title="gearman.client.STATUS_RES
+gearman.constants.STATUS_RES" class="py-name" href="#" onclick="return doclink('link-20', 'STATUS_RES', 'link-20');">STATUS_RES</a></tt>         <tt class="py-op">=</tt> <tt class="py-number">20</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt id="link-21" class="py-name" targets="Variable gearman.client.SUBMIT_JOB_HIGH=gearman.client-module.html#SUBMIT_JOB_HIGH,Variable gearman.constants.SUBMIT_JOB_HIGH=gearman.constants-module.html#SUBMIT_JOB_HIGH"><a title="gearman.client.SUBMIT_JOB_HIGH
+gearman.constants.SUBMIT_JOB_HIGH" class="py-name" href="#" onclick="return doclink('link-21', 'SUBMIT_JOB_HIGH', 'link-21');">SUBMIT_JOB_HIGH</a></tt>    <tt class="py-op">=</tt> <tt class="py-number">21</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"><tt id="link-22" class="py-name" targets="Variable gearman.client.SET_CLIENT_ID=gearman.client-module.html#SET_CLIENT_ID,Variable gearman.constants.SET_CLIENT_ID=gearman.constants-module.html#SET_CLIENT_ID"><a title="gearman.client.SET_CLIENT_ID
+gearman.constants.SET_CLIENT_ID" class="py-name" href="#" onclick="return doclink('link-22', 'SET_CLIENT_ID', 'link-22');">SET_CLIENT_ID</a></tt>      <tt class="py-op">=</tt> <tt class="py-number">22</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line"><tt id="link-23" class="py-name" targets="Variable gearman.client.CAN_DO_TIMEOUT=gearman.client-module.html#CAN_DO_TIMEOUT,Variable gearman.constants.CAN_DO_TIMEOUT=gearman.constants-module.html#CAN_DO_TIMEOUT"><a title="gearman.client.CAN_DO_TIMEOUT
+gearman.constants.CAN_DO_TIMEOUT" class="py-name" href="#" onclick="return doclink('link-23', 'CAN_DO_TIMEOUT', 'link-23');">CAN_DO_TIMEOUT</a></tt>     <tt class="py-op">=</tt> <tt class="py-number">23</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt id="link-24" class="py-name" targets="Variable gearman.client.ALL_YOURS=gearman.client-module.html#ALL_YOURS,Variable gearman.constants.ALL_YOURS=gearman.constants-module.html#ALL_YOURS"><a title="gearman.client.ALL_YOURS
+gearman.constants.ALL_YOURS" class="py-name" href="#" onclick="return doclink('link-24', 'ALL_YOURS', 'link-24');">ALL_YOURS</a></tt>          <tt class="py-op">=</tt> <tt class="py-number">24</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt id="link-25" class="py-name" targets="Variable gearman.client.WORK_EXCEPTION=gearman.client-module.html#WORK_EXCEPTION,Variable gearman.constants.WORK_EXCEPTION=gearman.constants-module.html#WORK_EXCEPTION"><a title="gearman.client.WORK_EXCEPTION
+gearman.constants.WORK_EXCEPTION" class="py-name" href="#" onclick="return doclink('link-25', 'WORK_EXCEPTION', 'link-25');">WORK_EXCEPTION</a></tt>     <tt class="py-op">=</tt> <tt class="py-number">25</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt id="link-26" class="py-name" targets="Variable gearman.client.OPTION_REQ=gearman.client-module.html#OPTION_REQ,Variable gearman.constants.OPTION_REQ=gearman.constants-module.html#OPTION_REQ"><a title="gearman.client.OPTION_REQ
+gearman.constants.OPTION_REQ" class="py-name" href="#" onclick="return doclink('link-26', 'OPTION_REQ', 'link-26');">OPTION_REQ</a></tt>         <tt class="py-op">=</tt> <tt class="py-number">26</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt id="link-27" class="py-name" targets="Variable gearman.client.OPTION_RES=gearman.client-module.html#OPTION_RES,Variable gearman.constants.OPTION_RES=gearman.constants-module.html#OPTION_RES"><a title="gearman.client.OPTION_RES
+gearman.constants.OPTION_RES" class="py-name" href="#" onclick="return doclink('link-27', 'OPTION_RES', 'link-27');">OPTION_RES</a></tt>         <tt class="py-op">=</tt> <tt class="py-number">27</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt id="link-28" class="py-name" targets="Variable gearman.client.WORK_DATA=gearman.client-module.html#WORK_DATA,Variable gearman.constants.WORK_DATA=gearman.constants-module.html#WORK_DATA"><a title="gearman.client.WORK_DATA
+gearman.constants.WORK_DATA" class="py-name" href="#" onclick="return doclink('link-28', 'WORK_DATA', 'link-28');">WORK_DATA</a></tt>          <tt class="py-op">=</tt> <tt class="py-number">28</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt id="link-29" class="py-name" targets="Variable gearman.client.WORK_WARNING=gearman.client-module.html#WORK_WARNING,Variable gearman.constants.WORK_WARNING=gearman.constants-module.html#WORK_WARNING"><a title="gearman.client.WORK_WARNING
+gearman.constants.WORK_WARNING" class="py-name" href="#" onclick="return doclink('link-29', 'WORK_WARNING', 'link-29');">WORK_WARNING</a></tt>       <tt class="py-op">=</tt> <tt class="py-number">29</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt id="link-30" class="py-name" targets="Variable gearman.client.GRAB_JOB_UNIQ=gearman.client-module.html#GRAB_JOB_UNIQ,Variable gearman.constants.GRAB_JOB_UNIQ=gearman.constants-module.html#GRAB_JOB_UNIQ"><a title="gearman.client.GRAB_JOB_UNIQ
+gearman.constants.GRAB_JOB_UNIQ" class="py-name" href="#" onclick="return doclink('link-30', 'GRAB_JOB_UNIQ', 'link-30');">GRAB_JOB_UNIQ</a></tt>      <tt class="py-op">=</tt> <tt class="py-number">30</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt id="link-31" class="py-name" targets="Variable gearman.client.JOB_ASSIGN_UNIQ=gearman.client-module.html#JOB_ASSIGN_UNIQ,Variable gearman.constants.JOB_ASSIGN_UNIQ=gearman.constants-module.html#JOB_ASSIGN_UNIQ"><a title="gearman.client.JOB_ASSIGN_UNIQ
+gearman.constants.JOB_ASSIGN_UNIQ" class="py-name" href="#" onclick="return doclink('link-31', 'JOB_ASSIGN_UNIQ', 'link-31');">JOB_ASSIGN_UNIQ</a></tt>    <tt class="py-op">=</tt> <tt class="py-number">31</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt id="link-32" class="py-name" targets="Variable gearman.client.SUBMIT_JOB_HIGH_BG=gearman.client-module.html#SUBMIT_JOB_HIGH_BG,Variable gearman.constants.SUBMIT_JOB_HIGH_BG=gearman.constants-module.html#SUBMIT_JOB_HIGH_BG"><a title="gearman.client.SUBMIT_JOB_HIGH_BG
+gearman.constants.SUBMIT_JOB_HIGH_BG" class="py-name" href="#" onclick="return doclink('link-32', 'SUBMIT_JOB_HIGH_BG', 'link-32');">SUBMIT_JOB_HIGH_BG</a></tt> <tt class="py-op">=</tt> <tt class="py-number">32</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt id="link-33" class="py-name" targets="Variable gearman.client.SUBMIT_JOB_LOW=gearman.client-module.html#SUBMIT_JOB_LOW,Variable gearman.constants.SUBMIT_JOB_LOW=gearman.constants-module.html#SUBMIT_JOB_LOW"><a title="gearman.client.SUBMIT_JOB_LOW
+gearman.constants.SUBMIT_JOB_LOW" class="py-name" href="#" onclick="return doclink('link-33', 'SUBMIT_JOB_LOW', 'link-33');">SUBMIT_JOB_LOW</a></tt>     <tt class="py-op">=</tt> <tt class="py-number">33</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt id="link-34" class="py-name" targets="Variable gearman.client.SUBMIT_JOB_LOW_BG=gearman.client-module.html#SUBMIT_JOB_LOW_BG,Variable gearman.constants.SUBMIT_JOB_LOW_BG=gearman.constants-module.html#SUBMIT_JOB_LOW_BG"><a title="gearman.client.SUBMIT_JOB_LOW_BG
+gearman.constants.SUBMIT_JOB_LOW_BG" class="py-name" href="#" onclick="return doclink('link-34', 'SUBMIT_JOB_LOW_BG', 'link-34');">SUBMIT_JOB_LOW_BG</a></tt>  <tt class="py-op">=</tt> <tt class="py-number">34</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"><tt id="link-35" class="py-name" targets="Variable gearman.client.SUBMIT_JOB_SCHED=gearman.client-module.html#SUBMIT_JOB_SCHED,Variable gearman.constants.SUBMIT_JOB_SCHED=gearman.constants-module.html#SUBMIT_JOB_SCHED"><a title="gearman.client.SUBMIT_JOB_SCHED
+gearman.constants.SUBMIT_JOB_SCHED" class="py-name" href="#" onclick="return doclink('link-35', 'SUBMIT_JOB_SCHED', 'link-35');">SUBMIT_JOB_SCHED</a></tt>   <tt class="py-op">=</tt> <tt class="py-number">35</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line"><tt id="link-36" class="py-name" targets="Variable gearman.client.SUBMIT_JOB_EPOCH=gearman.client-module.html#SUBMIT_JOB_EPOCH,Variable gearman.constants.SUBMIT_JOB_EPOCH=gearman.constants-module.html#SUBMIT_JOB_EPOCH"><a title="gearman.client.SUBMIT_JOB_EPOCH
+gearman.constants.SUBMIT_JOB_EPOCH" class="py-name" href="#" onclick="return doclink('link-36', 'SUBMIT_JOB_EPOCH', 'link-36');">SUBMIT_JOB_EPOCH</a></tt>   <tt class="py-op">=</tt> <tt class="py-number">36</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line"><tt class="py-comment"># Magic, type, data size</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"><tt id="link-37" class="py-name" targets="Variable gearman.client.PKT_FMT=gearman.client-module.html#PKT_FMT,Variable gearman.constants.PKT_FMT=gearman.constants-module.html#PKT_FMT"><a title="gearman.client.PKT_FMT
+gearman.constants.PKT_FMT" class="py-name" href="#" onclick="return doclink('link-37', 'PKT_FMT', 'link-37');">PKT_FMT</a></tt> <tt class="py-op">=</tt> <tt class="py-string">"&gt;III"</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"><tt id="link-38" class="py-name" targets="Variable gearman.client.HEADER_LEN=gearman.client-module.html#HEADER_LEN,Variable gearman.constants.HEADER_LEN=gearman.constants-module.html#HEADER_LEN"><a title="gearman.client.HEADER_LEN
+gearman.constants.HEADER_LEN" class="py-name" href="#" onclick="return doclink('link-38', 'HEADER_LEN', 'link-38');">HEADER_LEN</a></tt> <tt class="py-op">=</tt> <tt class="py-name">struct</tt><tt class="py-op">.</tt><tt class="py-name">calcsize</tt><tt class="py-op">(</tt><tt id="link-39" class="py-name"><a title="gearman.client.PKT_FMT
+gearman.constants.PKT_FMT" class="py-name" href="#" onclick="return doclink('link-39', 'PKT_FMT', 'link-37');">PKT_FMT</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="gearman-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    <a href="epydoc-log.html">Generated by Epydoc
+    3.0.1 on Sun Jul 26 19:19:41 2009</a>
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
