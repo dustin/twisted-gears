@@ -314,6 +314,25 @@ class GearmanClientTest(ProtocolTestCase):
 
     def test_submit(self):
         d = self.gc.submit('test', 'test data')
+        self.assertReceived(constants.SUBMIT_JOB, 'test\0\0test data')
+        self.write_response(constants.JOB_CREATED, 'test_submit')
+        self.write_response(constants.WORK_COMPLETE,
+                            'test_submit\0done')
+        d.addCallback(lambda x: self.assertEquals("done", x))
+        return d
+
+    def test_submitHigh(self):
+        d = self.gc.submitHigh('test', 'test data')
+        self.assertReceived(constants.SUBMIT_JOB_HIGH, 'test\0\0test data')
+        self.write_response(constants.JOB_CREATED, 'test_submit')
+        self.write_response(constants.WORK_COMPLETE,
+                            'test_submit\0done')
+        d.addCallback(lambda x: self.assertEquals("done", x))
+        return d
+
+    def test_submitLow(self):
+        d = self.gc.submitLow('test', 'test data', 'uniqid')
+        self.assertReceived(constants.SUBMIT_JOB_LOW, 'test\0uniqid\0test data')
         self.write_response(constants.JOB_CREATED, 'test_submit')
         self.write_response(constants.WORK_COMPLETE,
                             'test_submit\0done')

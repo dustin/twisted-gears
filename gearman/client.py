@@ -222,16 +222,27 @@ class GearmanClient(object):
         elif cmd == WORK_FAIL:
             job._deferred.errback(GearmanJobFailed())
 
-    def submit(self, function, data, unique_id=''):
-        """Submit a job with the given function name and data."""
+    def _submit(self, cmd, function, data, unique_id):
 
         def _submitted(x, d):
             self._register(x[1], GearmanJobHandle(d))
 
-        d = self.protocol.send(SUBMIT_JOB,
+        d = self.protocol.send(cmd,
                                function + "\0" + unique_id + "\0" + data)
 
         rv = defer.Deferred()
         d.addCallback(_submitted, rv)
 
         return rv
+
+    def submit(self, function, data, unique_id=''):
+        """Submit a job with the given function name and data."""
+        return self._submit(SUBMIT_JOB, function, data, unique_id)
+
+    def submitHigh(self, function, data, unique_id=''):
+        """Submit a high priority job with the given function name and data."""
+        return self._submit(SUBMIT_JOB_HIGH, function, data, unique_id)
+
+    def submitLow(self, function, data, unique_id=''):
+        """Submit a low priority job with the given function name and data."""
+        return self._submit(SUBMIT_JOB_LOW, function, data, unique_id)
