@@ -129,7 +129,7 @@ class GearmanProtocolTest(ProtocolTestCase):
 class GearmanJobTest(unittest.TestCase):
 
     def test_constructor(self):
-        gj = client.GearmanJob("footdle\0dys\0some data")
+        gj = client._GearmanJob("footdle\0dys\0some data")
         self.assertEquals("footdle", gj.handle)
         self.assertEquals("dys", gj.function)
         self.assertEquals("some data", gj.data)
@@ -148,7 +148,7 @@ class GearmanWorkerTest(ProtocolTestCase):
         self.assertReceived(constants.CAN_DO, "awesomeness")
 
     def test_sendingJobResponse(self):
-        job = client.GearmanJob("test\0blah\0junk")
+        job = client._GearmanJob("test\0blah\0junk")
         self.gw._send_job_res(constants.WORK_COMPLETE, job, "the value")
         self.assertReceived(constants.WORK_COMPLETE, "test\0the value")
 
@@ -202,7 +202,7 @@ class GearmanWorkerTest(ProtocolTestCase):
 
     def test_finishJob(self):
         self.gw.functions['blah'] = lambda x: x.upper()
-        job = client.GearmanJob("test\0blah\0junk")
+        job = client._GearmanJob("test\0blah\0junk")
         d = self.gw._finishJob(job)
 
         d.addCallback(lambda x:
@@ -211,7 +211,7 @@ class GearmanWorkerTest(ProtocolTestCase):
 
     def test_finishJobNull(self):
         self.gw.functions['blah'] = lambda x: None
-        job = client.GearmanJob("test\0blah\0junk")
+        job = client._GearmanJob("test\0blah\0junk")
         d = self.gw._finishJob(job)
 
         d.addCallback(lambda x:
@@ -222,7 +222,7 @@ class GearmanWorkerTest(ProtocolTestCase):
         def _failing(x):
             raise Exception("failed")
         self.gw.functions['blah'] = _failing
-        job = client.GearmanJob("test\0blah\0junk")
+        job = client._GearmanJob("test\0blah\0junk")
         d = self.gw._finishJob(job)
 
         def _checkReceived(x):

@@ -88,7 +88,7 @@ class GearmanProtocol(stateful.StatefulProtocol):
 
         return self.send(ECHO_REQ, data)
 
-class GearmanJob(object):
+class _GearmanJob(object):
     """A gearman job."""
 
     def __init__(self, raw_data):
@@ -140,7 +140,7 @@ class GearmanWorker(object):
         while stuff[0] == NO_JOB:
             yield self._sleep()
             stuff = yield self.protocol.send(GRAB_JOB)
-        defer.returnValue(GearmanJob(stuff[1]))
+        defer.returnValue(_GearmanJob(stuff[1]))
 
     @defer.inlineCallbacks
     def _finishJob(self, job):
@@ -183,6 +183,7 @@ class _GearmanJobHandle(object):
         return ''.join(self._work_warning)
 
 class GearmanJobFailed(Exception):
+    """Exception thrown when a job fails."""
     pass
 
 class GearmanClient(object):
