@@ -1,3 +1,5 @@
+"""Protocol definitions."""
+
 import struct
 
 REQ_MAGIC          = "\0REQ"
