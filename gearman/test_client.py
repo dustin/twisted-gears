@@ -290,16 +290,16 @@ class GearmanClientTest(ProtocolTestCase):
 
     def test_unsolicitedUnused(self):
         self.gc._register('x', client.GearmanJobHandle(None))
-        self.gc.unsolicited(constants.WORK_DATA, "x\0some data")
+        self.gc._unsolicited(constants.WORK_DATA, "x\0some data")
 
     def test_unsolicitedUnusedNoData(self):
         self.gc._register('x', client.GearmanJobHandle(None))
-        self.gc.unsolicited(constants.WORK_DATA, "x")
+        self.gc._unsolicited(constants.WORK_DATA, "x")
 
     def test_finishJob(self):
         d = defer.Deferred()
         self.gc._register('x', client.GearmanJobHandle(d))
-        self.gc.unsolicited(constants.WORK_COMPLETE, "x\0some data")
+        self.gc._unsolicited(constants.WORK_COMPLETE, "x\0some data")
 
         d.addCallback(lambda x: self.assertEquals("some data", x))
         return d
@@ -307,7 +307,7 @@ class GearmanClientTest(ProtocolTestCase):
     def test_failJob(self):
         d = defer.Deferred()
         self.gc._register('x', client.GearmanJobHandle(d))
-        self.gc.unsolicited(constants.WORK_FAIL, "x\0some data")
+        self.gc._unsolicited(constants.WORK_FAIL, "x\0some data")
 
         d.addErrback(lambda x: x.trap(client.GearmanJobFailed))
         return d

@@ -192,13 +192,13 @@ class GearmanClient(object):
 
     def __init__(self, protocol):
         self.protocol = protocol
-        self.protocol.register_unsolicited(self.unsolicited)
+        self.protocol.register_unsolicited(self._unsolicited)
         self.jobs = {}
 
     def _register(self, job_handle, job):
         self.jobs[job_handle] = job
 
-    def unsolicited(self, cmd, data):
+    def _unsolicited(self, cmd, data):
         if cmd in [ WORK_COMPLETE, WORK_FAIL,
                     WORK_DATA, WORK_WARNING ]:
             pos = data.find("\0")
