@@ -246,3 +246,19 @@ class GearmanClient(object):
     def submitLow(self, function, data, unique_id=''):
         """Submit a low priority job with the given function name and data."""
         return self._submit(SUBMIT_JOB_LOW, function, data, unique_id)
+
+    def _submitBg(self, cmd, function, data, unique_id):
+        return self.protocol.send(cmd,
+                                  function + "\0" + unique_id + "\0" + data)
+
+    def submitBackground(self, function, data, unique_id=''):
+        """Submit a job for background execution."""
+        return self._submitBg(SUBMIT_JOB_BG, function, data, unique_id)
+
+    def submitBackgroundLow(self, function, data, unique_id=''):
+        """Submit a job for background execution at low priority."""
+        return self._submitBg(SUBMIT_JOB_LOW_BG, function, data, unique_id)
+
+    def submitBackgroundHigh(self, function, data, unique_id=''):
+        """Submit a job for background execution at high priority."""
+        return self._submitBg(SUBMIT_JOB_HIGH_BG, function, data, unique_id)

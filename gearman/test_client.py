@@ -338,3 +338,21 @@ class GearmanClientTest(ProtocolTestCase):
                             'test_submit\0done')
         d.addCallback(lambda x: self.assertEquals("done", x))
         return d
+
+    def test_submitBackground(self):
+        d = self.gc.submitBackground('test', 'test data')
+        self.assertReceived(constants.SUBMIT_JOB_BG, 'test\0\0test data')
+        self.write_response(constants.JOB_CREATED, 'test_submit')
+        return d
+
+    def test_submitBackgroundLow(self):
+        d = self.gc.submitBackgroundLow('test', 'test data')
+        self.assertReceived(constants.SUBMIT_JOB_LOW_BG, 'test\0\0test data')
+        self.write_response(constants.JOB_CREATED, 'test_submit')
+        return d
+
+    def test_submitBackgroundHigh(self):
+        d = self.gc.submitBackgroundHigh('test', 'test data')
+        self.assertReceived(constants.SUBMIT_JOB_HIGH_BG, 'test\0\0test data')
+        self.write_response(constants.JOB_CREATED, 'test_submit')
+        return d
