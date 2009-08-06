@@ -18,7 +18,7 @@ __all__ = ['GearmanProtocol', 'GearmanWorker', 'GearmanClient']
 class GearmanProtocol(stateful.StatefulProtocol):
     """Base protocol for handling gearman connections."""
 
-    unsolicited = [ WORK_COMPLETE, WORK_FAIL,
+    unsolicited = [ WORK_COMPLETE, WORK_FAIL, NOOP,
                     WORK_DATA, WORK_WARNING, WORK_EXCEPTION ]
 
     def makeConnection(self, transport):
@@ -79,10 +79,6 @@ class GearmanProtocol(stateful.StatefulProtocol):
     def unregister_unsolicited(self, cb):
         self.unsolicited_handlers.discard(cb)
 
-    def pre_sleep(self):
-        """Enter a sleep state."""
-        return self.send(PRE_SLEEP)
-
     def echo(self, data="hello"):
         """Send an echo request."""
 
@@ -106,6 +102,7 @@ class GearmanWorker(object):
         self.protocol = protocol
         self.functions = {}
         self.sleeping = None
+        self.protocol.register_unsolicited(self._unsolicited)
 
     def setId(self, client_id):
         """Set the client ID for monitoring and what-not."""
@@ -122,11 +119,15 @@ class GearmanWorker(object):
 
     def _sleep(self):
         if not self.sleeping:
-            self.sleeping = self.protocol.pre_sleep()
-            def _clear(x):
-                self.sleeping = None
-            self.sleeping.addBoth(_clear)
+            self.sleeping = defer.Deferred()
+            self.protocol.send_raw(PRE_SLEEP)
         return self.sleeping
+
+    def _unsolicited(self, cmd, data):
+        assert cmd == NOOP
+        if self.sleeping:
+            self.sleeping.callback(None)
+            self.sleeping = None
 
     @defer.inlineCallbacks
     def getJob(self):

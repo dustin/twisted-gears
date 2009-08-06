@@ -85,10 +85,6 @@ class GearmanProtocolTest(ProtocolTestCase):
         self.gp.dataReceived("X" * constants.HEADER_LEN)
         reactor.callLater(0, self.assertEquals, 1, self.trans.disconnected)
 
-    def test_pre_sleep(self):
-        d = self.gp.pre_sleep()
-        self.assertReceived(constants.PRE_SLEEP, "")
-
     def test_send_echo(self):
         d = self.gp.echo()
         self.assertReceived(constants.ECHO_REQ, "hello")
@@ -175,6 +171,22 @@ class GearmanWorkerTest(ProtocolTestCase):
     def test_getJobWithWaiting(self):
         d = self.gw.getJob()
         self.write_response(constants.NO_JOB, "")
+        self.write_response(constants.NOOP, "")
+        self.write_response(constants.JOB_ASSIGN,
+                            "footdle\0funk\0args and stuff")
+        def _handleJob(j):
+            self.assertEquals("footdle", j.handle)
+            self.assertEquals("funk", j.function)
+            self.assertEquals("args and stuff", j.data)
+
+        d.addCallback(_handleJob)
+        return d
+
+    def test_getJobWithWaitingMultiNOOP(self):
+        d = self.gw.getJob()
+        self.write_response(constants.NO_JOB, "")
+        self.write_response(constants.NOOP, "")
+        self.write_response(constants.NOOP, "")
         self.write_response(constants.NOOP, "")
         self.write_response(constants.JOB_ASSIGN,
                             "footdle\0funk\0args and stuff")
