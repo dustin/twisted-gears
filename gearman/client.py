@@ -21,8 +21,7 @@ class GearmanProtocol(stateful.StatefulProtocol):
     unsolicited = [ WORK_COMPLETE, WORK_FAIL, NOOP,
                     WORK_DATA, WORK_WARNING, WORK_EXCEPTION ]
 
-    def makeConnection(self, transport):
-        stateful.StatefulProtocol.makeConnection(self, transport)
+    def connectionMade(self):
         self.receivingCommand = 0
         self.deferreds = deque()
         self.unsolicited_handlers = set()
