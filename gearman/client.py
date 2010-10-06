@@ -148,7 +148,7 @@ class GearmanWorker(object):
         f = self.functions[job.function]
         assert f
         try:
-            rv = yield f(job.data)
+            rv = yield f(job)
             if rv is None:
                 rv = ""
             self._send_job_res(WORK_COMPLETE, job, rv)
