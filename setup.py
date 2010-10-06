@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name = "twisted-gears",
-    version = "0.1",
+    version = "0.2",
     author = "Dustin Sallings",
     author_email = "dustin@spy.net",
     url = "http://bleu.west.spy.net/~dustin/",
