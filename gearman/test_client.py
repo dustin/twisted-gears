@@ -125,7 +125,7 @@ class GearmanProtocolTest(ProtocolTestCase):
 class GearmanJobTest(unittest.TestCase):
 
     def test_constructor(self):
-        gj = client._GearmanJob("footdle\0dys\0some data")
+        gj = client._GearmanJob(handle="footdle", function="dys", data="some data")
         self.assertEquals("footdle", gj.handle)
         self.assertEquals("dys", gj.function)
         self.assertEquals("some data", gj.data)
@@ -144,7 +144,7 @@ class GearmanWorkerTest(ProtocolTestCase):
         self.assertReceived(constants.CAN_DO, "awesomeness")
 
     def test_sendingJobResponse(self):
-        job = client._GearmanJob("test\0blah\0junk")
+        job = client._GearmanJob(handle="test", function="blah", data="junk")
         self.gw._send_job_res(constants.WORK_COMPLETE, job, "the value")
         self.assertReceived(constants.WORK_COMPLETE, "test\0the value")
 
@@ -213,8 +213,8 @@ class GearmanWorkerTest(ProtocolTestCase):
         return defer.DeferredList([sd, d])
 
     def test_finishJob(self):
-        self.gw.functions['blah'] = lambda x: x.upper()
-        job = client._GearmanJob("test\0blah\0junk")
+        self.gw.functions['blah'] = lambda x: x.data.upper()
+        job = client._GearmanJob(handle="test", function="blah", data="junk")
         d = self.gw._finishJob(job)
 
         d.addCallback(lambda x:
@@ -223,7 +223,7 @@ class GearmanWorkerTest(ProtocolTestCase):
 
     def test_finishJobNull(self):
         self.gw.functions['blah'] = lambda x: None
-        job = client._GearmanJob("test\0blah\0junk")
+        job = client._GearmanJob(handle="test", function="blah", data="junk")
         d = self.gw._finishJob(job)
 
         d.addCallback(lambda x:
@@ -234,18 +234,18 @@ class GearmanWorkerTest(ProtocolTestCase):
         def _failing(x):
             raise Exception("failed")
         self.gw.functions['blah'] = _failing
-        job = client._GearmanJob("test\0blah\0junk")
+        job = client._GearmanJob(handle="test", function="blah", data="junk")
         d = self.gw._finishJob(job)
 
         def _checkReceived(x):
             self.assertReceived(constants.WORK_EXCEPTION,
                                 "test\0" + 'Exception(failed)')
-            self.assertReceived(constants.WORK_FAIL, "test\0")
+            self.assertReceived(constants.WORK_FAIL, "test")
 
         d.addCallback(_checkReceived)
 
     def test_doJob(self):
-        self.gw.functions['blah'] = lambda x: x.upper()
+        self.gw.functions['blah'] = lambda x: x.data.upper()
         d = self.gw.doJob()
         self.write_response(constants.JOB_ASSIGN,
                             "footdle\0blah\0args and stuff")
@@ -259,7 +259,7 @@ class GearmanWorkerTest(ProtocolTestCase):
         return d
 
     def test_doJobs(self):
-        self.gw.functions['blah'] = lambda x: x.upper()
+        self.gw.functions['blah'] = lambda x: x.data.upper()
         d = self.gw.doJobs().next()
         self.write_response(constants.JOB_ASSIGN,
                             "footdle\0blah\0args and stuff")
@@ -319,7 +319,7 @@ class GearmanClientTest(ProtocolTestCase):
     def test_failJob(self):
         d = defer.Deferred()
         self.gc._register('x', client._GearmanJobHandle(d))
-        self.gc._unsolicited(constants.WORK_FAIL, "x\0some data")
+        self.gc._unsolicited(constants.WORK_FAIL, "x")
 
         d.addErrback(lambda x: x.trap(client.GearmanJobFailed))
         return d

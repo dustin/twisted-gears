@@ -26,16 +26,17 @@ class GearmanProtocol(stateful.StatefulProtocol):
         self.deferreds = deque()
         self.unsolicited_handlers = set()
 
-    def send_raw(self, cmd, data=''):
+    def send_raw(self, cmd, *args):
         """Send a command with the given data with no response."""
 
+        data = "\0".join(args)
         self.transport.writeSequence([REQ_MAGIC,
                                       struct.pack(">II", cmd, len(data)),
                                       data])
 
-    def send(self, cmd, data=''):
+    def send(self, cmd, *args):
         """Send a command and get a deferred waiting for the response."""
-        self.send_raw(cmd, data)
+        self.send_raw(cmd, *args)
         d = defer.Deferred()
         self.deferreds.append(d)
         return d
@@ -86,8 +87,10 @@ class GearmanProtocol(stateful.StatefulProtocol):
 class _GearmanJob(object):
     """A gearman job."""
 
-    def __init__(self, raw_data):
-        self.handle, self.function, self.data = raw_data.split("\0", 2)
+    def __init__(self, handle, function, data):
+        self.handle = handle
+        self.function = function
+        self.data = data
 
     def __repr__(self):
         return "<GearmanJob %s func=%s with %d bytes of data>" % (self.handle,
@@ -113,8 +116,8 @@ class GearmanWorker(object):
         self.functions[name] = func
         self.protocol.send_raw(CAN_DO, name)
 
-    def _send_job_res(self, cmd, job, data=''):
-        self.protocol.send_raw(cmd, job.handle + "\0" + data)
+    def _send_job_res(self, cmd, job, *args):
+        self.protocol.send_raw(cmd, job.handle, *args)
 
     def _sleep(self):
         if not self.sleeping:
@@ -140,7 +143,8 @@ class GearmanWorker(object):
         while stuff[0] == NO_JOB:
             yield self._sleep()
             stuff = yield self.protocol.send(GRAB_JOB)
-        defer.returnValue(_GearmanJob(stuff[1]))
+        handle, function, data = stuff[1].split('\0', 2)
+        defer.returnValue(_GearmanJob(handle, function, data))
 
     @defer.inlineCallbacks
     def _finishJob(self, job):
@@ -228,8 +232,7 @@ class GearmanClient(object):
         def _submitted(x, d):
             self._register(x[1], _GearmanJobHandle(d))
 
-        d = self.protocol.send(cmd,
-                               function + "\0" + unique_id + "\0" + data)
+        d = self.protocol.send(cmd, function, unique_id, data)
 
         rv = defer.Deferred()
         d.addCallback(_submitted, rv)
@@ -249,8 +252,7 @@ class GearmanClient(object):
         return self._submit(SUBMIT_JOB_LOW, function, data, unique_id)
 
     def _submitBg(self, cmd, function, data, unique_id):
-        return self.protocol.send(cmd,
-                                  function + "\0" + unique_id + "\0" + data)
+        return self.protocol.send(cmd, function, unique_id, data)
 
     def submitBackground(self, function, data, unique_id=''):
         """Submit a job for background execution."""
