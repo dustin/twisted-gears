@@ -10,9 +10,9 @@ from twisted.python import util
 
 from gearman import client
 
-def run_test(j):
-    print repr(j)
-    return j
+def run_test(job):
+    print repr(job.data)
+    return job.data
 
 # @defer.inlineCallbacks
 def worker(gearman):
